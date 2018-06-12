@@ -13,18 +13,18 @@ class App extends Component {
           <nav>
             <ul>
               <li>
-                <Link to="/">Home</Link>
+                <Link to="/mock-helpdesk">Home</Link>
               </li>
               <li>
-                <Link to="/dashboard">Agent Dashboard</Link>
+                <Link to="/mock-helpdesk/dashboard">Agent Dashboard</Link>
               </li>
             </ul>
           </nav>
         </header>
         <main>
           <Switch>
-            <Route exact path="/" component={RequestForm} />
-            <Route exact path="/dashboard" component={AgentDashboard} />
+            <Route exact path="/mock-helpdesk" component={RequestForm} />
+            <Route exact path="/mock-helpdesk/dashboard" component={AgentDashboard} />
           </Switch>
         </main>
       </div>

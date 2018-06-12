@@ -17,8 +17,6 @@ class RequestForm extends Component {
   xhr = new XMLHttpRequest();
   formElement = null;
 
-  // validate = () => (this.formElement.checkValidity() ? true : false);
-
   queueLength = () => {
     this.xhr.open("GET", "http://queue.continuation.org/queue/");
     this.xhr.onload = () =>
@@ -37,7 +35,6 @@ class RequestForm extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    // if (this.validate()) {
     this.xhr.responseType = "json";
     this.xhr.open("POST", "http://queue.continuation.org/queue/");
     this.xhr.setRequestHeader("Content-Type", "application/json");
@@ -48,7 +45,6 @@ class RequestForm extends Component {
     }
     this.xhr.send(JSON.stringify(jsonData));
     this.xhr.onload = this.queueLength;
-    // }
   };
 
   render = () => {
