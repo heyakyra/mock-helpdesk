@@ -14,11 +14,13 @@ class AgentDashboard extends Component {
 
   xhr = new XMLHttpRequest();
 
+  // initializes queue
   componentDidMount = () => {
     this.xhr.responseType = "json";
     this.loadQueue();
   };
 
+  // helper function to fetch and reload queue
   loadQueue = () => {
     this.xhr.open("GET", "http://queue.continuation.org/queue/");
     this.xhr.onload = () => {
@@ -30,6 +32,7 @@ class AgentDashboard extends Component {
     this.xhr.send(null);
   };
 
+  // stores 'claimed' ticket on state, deletes it from server
   clickHandler = () => {
     const id = this.state.queue[0].id;
     this.xhr.open("DELETE", `http://queue.continuation.org/queue/${id}`);

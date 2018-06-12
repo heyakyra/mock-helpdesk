@@ -8,15 +8,13 @@ import CardActions from "@material-ui/core/CardActions";
 class RequestForm extends Component {
   state = {
     isSubmitted: false,
-    queuePosition: 0,
-    name: "",
-    tel: "",
-    email: ""
+    queuePosition: 0
   };
 
   xhr = new XMLHttpRequest();
   formElement = null;
 
+  // open xhr request for queue, stores length on state
   queueLength = () => {
     this.xhr.open("GET", "http://queue.continuation.org/queue/");
     this.xhr.onload = () =>
@@ -27,12 +25,7 @@ class RequestForm extends Component {
     this.xhr.send(null);
   };
 
-  handleChange = evt => {
-    this.setState({
-      [evt.target.name]: evt.target.value
-    });
-  };
-
+  // open xhr request, convert form data to json, and send!
   handleSubmit = event => {
     event.preventDefault();
     this.xhr.responseType = "json";
@@ -82,8 +75,6 @@ class RequestForm extends Component {
                       type="text"
                       id="name"
                       name="name"
-                      value={this.state.name}
-                      onChange={this.handleChange}
                     />
                     <span className="error" />
                   </label>
@@ -100,8 +91,6 @@ class RequestForm extends Component {
                       id="tel"
                       name="tel"
                       pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                      value={this.state.tel}
-                      onChange={this.handleChange}
                     />
                     <span className="error" />
                   </label>
@@ -114,8 +103,6 @@ class RequestForm extends Component {
                       required="true"
                       inputMode="email"
                       autoComplete="email"
-                      value={this.state.email}
-                      onChange={this.handleChange}
                       id="email"
                       name="email"
                     />
