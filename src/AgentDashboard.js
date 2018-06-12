@@ -22,7 +22,7 @@ class AgentDashboard extends Component {
 
   // helper function to fetch and reload queue
   loadQueue = () => {
-    this.xhr.open("GET", "http://queue.continuation.org/queue/");
+    this.xhr.open("GET", "//queue.continuation.org/queue/");
     this.xhr.onload = () => {
       this.setState({ queue: this.xhr.response });
     };
@@ -35,7 +35,7 @@ class AgentDashboard extends Component {
   // stores 'claimed' ticket on state, deletes it from server
   clickHandler = () => {
     const id = this.state.queue[0].id;
-    this.xhr.open("DELETE", `http://queue.continuation.org/queue/${id}`);
+    this.xhr.open("DELETE", `//queue.continuation.org/queue/${id}`);
     this.xhr.onload = () => {
       if (this.xhr.status === 204) {
         this.setState({ claimed: this.state.queue[0], error: "" });

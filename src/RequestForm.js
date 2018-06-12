@@ -16,7 +16,7 @@ class RequestForm extends Component {
 
   // open xhr request for queue, stores length on state
   queuePosition = id => {
-    this.xhr.open("GET", "http://queue.continuation.org/queue/");
+    this.xhr.open("GET", "//queue.continuation.org/queue/");
     this.xhr.onload = () => {
       const withId = ticketData => {
         return ticketData.id === id;
@@ -33,7 +33,7 @@ class RequestForm extends Component {
   handleSubmit = event => {
     event.preventDefault();
     this.xhr.responseType = "json";
-    this.xhr.open("POST", "http://queue.continuation.org/queue/");
+    this.xhr.open("POST", "//queue.continuation.org/queue/");
     this.xhr.setRequestHeader("Content-Type", "application/json");
     const jsonData = {};
     const formData = new FormData(this.formElement);
