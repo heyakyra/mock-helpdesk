@@ -17,9 +17,7 @@ class RequestForm extends Component {
   xhr = new XMLHttpRequest();
   formElement = null;
 
-  validate = () => {
-    this.formElement.checkValidity() ? true : false;
-  };
+  // validate = () => (this.formElement.checkValidity() ? true : false);
 
   queueLength = () => {
     this.xhr.open("GET", "http://queue.continuation.org/queue/");
@@ -40,16 +38,16 @@ class RequestForm extends Component {
   handleSubmit = event => {
     event.preventDefault();
     // if (this.validate()) {
-      this.xhr.responseType = "json";
-      this.xhr.open("POST", "http://queue.continuation.org/queue/");
-      this.xhr.setRequestHeader("Content-Type", "application/json");
-      const jsonData = {};
-      const formData = new FormData(this.formElement);
-      for (const [key, value] of formData.entries()) {
-        key === "tel" ? (jsonData.phone = value) : (jsonData[key] = value);
-      }
-      this.xhr.send(JSON.stringify(jsonData));
-      this.xhr.onload = this.queueLength;
+    this.xhr.responseType = "json";
+    this.xhr.open("POST", "http://queue.continuation.org/queue/");
+    this.xhr.setRequestHeader("Content-Type", "application/json");
+    const jsonData = {};
+    const formData = new FormData(this.formElement);
+    for (const [key, value] of formData.entries()) {
+      key === "tel" ? (jsonData.phone = value) : (jsonData[key] = value);
+    }
+    this.xhr.send(JSON.stringify(jsonData));
+    this.xhr.onload = this.queueLength;
     // }
   };
 
