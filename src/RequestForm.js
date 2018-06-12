@@ -15,13 +15,17 @@ class RequestForm extends Component {
   formElement = null;
 
   // open xhr request for queue, stores length on state
-  queueLength = () => {
+  queuePosition = id => {
     this.xhr.open("GET", "http://queue.continuation.org/queue/");
-    this.xhr.onload = () =>
+    this.xhr.onload = () => {
+      const withId = ticketData => {
+        return ticketData.id === id;
+      };
       this.setState({
-        queuePosition: this.xhr.response.length,
+        queuePosition: this.xhr.response.findIndex(withId) + 1,
         isSubmitted: true
       });
+    };
     this.xhr.send(null);
   };
 
@@ -37,7 +41,10 @@ class RequestForm extends Component {
       key === "tel" ? (jsonData.phone = value) : (jsonData[key] = value);
     }
     this.xhr.send(JSON.stringify(jsonData));
-    this.xhr.onload = this.queueLength;
+    this.xhr.onload = () => {
+      const { id } = this.xhr.response;
+      this.queuePosition(id);
+    };
   };
 
   render = () => {
