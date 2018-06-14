@@ -5,28 +5,32 @@ import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardActions from "@material-ui/core/CardActions";
 
+const addOrdinals = num => {
+  switch (num % 10) {
+    case 1:
+      return num + "st";
+    case 2:
+      return num + "nd";
+    case 3:
+      return num + "rd";
+    default:
+      return num + "th";
+  }
+};
+
 const RequestItem = props => {
   const id = props.requestTicket.id;
   const name = props.requestTicket.name;
   const phone = props.requestTicket.phone;
   const email = props.requestTicket.email;
   const position = props.position;
+  const claimed = !position;
   const clickHandler = props.clickHandler;
   const title =
-    (position
-      ? position +
-        (position % 10 === 1
-          ? "st"
-          : position % 10 === 2
-            ? "nd"
-            : position % 10 === 3
-              ? "rd"
-              : "th") +
-        " — "
-      : "Current Ticket: ") + name;
+    (claimed ? "Current Ticket: " : addOrdinals(position) + " — ") + name;
 
   return (
-    <li>
+    <li className={claimed ? "claimed" : "unclaimed"}>
       <Card>
         <CardHeader
           title={title}
@@ -39,11 +43,7 @@ const RequestItem = props => {
         </CardContent>
         <CardActions>
           {position === 1 && (
-            <Button
-              onClick={clickHandler}
-              label="Claim"
-              children={"Claim"}
-            />
+            <Button onClick={clickHandler} label="Claim" children={"Claim"} />
           )}
         </CardActions>
       </Card>

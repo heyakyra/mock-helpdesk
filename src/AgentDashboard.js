@@ -9,7 +9,8 @@ class AgentDashboard extends Component {
   state = {
     queue: [],
     claimed: {},
-    error: ""
+    error: "",
+    loaded: false
   };
 
   xhr = new XMLHttpRequest();
@@ -24,10 +25,10 @@ class AgentDashboard extends Component {
   loadQueue = () => {
     this.xhr.open("GET", "//queue.continuation.org/queue/");
     this.xhr.onload = () => {
-      this.setState({ queue: this.xhr.response });
+      this.setState({ queue: this.xhr.response, loaded: true });
     };
     this.xhr.onerror = () => {
-      this.setState({ error: this.xhr.statusText });
+      this.setState({ error: this.xhr.statusText, loaded: true });
     };
     this.xhr.send(null);
   };
@@ -38,17 +39,23 @@ class AgentDashboard extends Component {
     this.xhr.open("DELETE", `//queue.continuation.org/queue/${id}`);
     this.xhr.onload = () => {
       if (this.xhr.status === 204) {
-        this.setState({ claimed: this.state.queue[0], error: "" });
+        this.setState({
+          claimed: this.state.queue[0],
+          error: "",
+          loaded: true
+        });
       } else {
         this.setState({
-          error: "That ticket had already been claimed!"
+          error: "That ticket had already been claimed!",
+          loaded: true
         });
       }
       this.loadQueue();
     };
     this.xhr.onerror = () => {
       this.setState({
-        error: "That ticket had already been claimed!"
+        error: "That ticket had already been claimed!",
+        loaded: true
       });
       this.loadQueue();
     };
@@ -59,42 +66,52 @@ class AgentDashboard extends Component {
     const error = this.state.error;
     const queue = this.state.queue;
     const claimed = this.state.claimed;
+    const loaded = this.state.loaded;
 
     return (
       <div>
         <h2>Current queue</h2>
         {error && <span id="error">{`${error}`}</span>}
-        <ul id="request-queue">
-          {Object.keys(claimed).length ? (
-            <RequestItem requestTicket={claimed} />
-          ) : null}
-          {queue.length ? (
-            queue.map((requestTicket, index) => (
-              <RequestItem
-                key={`${requestTicket.id}`}
-                requestTicket={requestTicket}
-                position={index + 1}
-                clickHandler={this.clickHandler}
-              />
-            ))
-          ) : (
-            <li>
-              <Card>
-                <CardHeader
-                  title="All done!"
-                  subheader="No more tickets in the queue"
+        {!loaded ? (
+          <Card>
+            <CardHeader
+              title="Loading..."
+              subheader="the queue will be available shortly"
+            />
+          </Card>
+        ) : (
+          <ul id="request-queue">
+            {Object.keys(claimed).length ? (
+              <RequestItem requestTicket={claimed} />
+            ) : null}
+            {queue.length ? (
+              queue.map((requestTicket, index) => (
+                <RequestItem
+                  key={`${requestTicket.id}`}
+                  requestTicket={requestTicket}
+                  position={index + 1}
+                  clickHandler={this.clickHandler}
                 />
-                <CardActions>
-                  <Button
-                    onClick={this.loadQueue}
-                    label="Reload"
-                    children="Reload"
+              ))
+            ) : (
+              <li>
+                <Card>
+                  <CardHeader
+                    title="All done!"
+                    subheader="No more tickets in the queue"
                   />
-                </CardActions>
-              </Card>
-            </li>
-          )}
-        </ul>
+                  <CardActions>
+                    <Button
+                      onClick={this.loadQueue}
+                      label="Reload"
+                      children="Reload"
+                    />
+                  </CardActions>
+                </Card>
+              </li>
+            )}
+          </ul>
+        )}
       </div>
     );
   };

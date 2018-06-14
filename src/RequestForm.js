@@ -38,7 +38,7 @@ class RequestForm extends Component {
     const jsonData = {};
     const formData = new FormData(this.formElement);
     for (const [key, value] of formData.entries()) {
-      key === "tel" ? (jsonData.phone = value) : (jsonData[key] = value);
+      jsonData[key] = value;
     }
     this.xhr.send(JSON.stringify(jsonData));
     this.xhr.onload = () => {
@@ -59,7 +59,7 @@ class RequestForm extends Component {
       <Card>
         <CardHeader
           title="Submit a help ticket"
-          subheader="Your request has been added"
+          subheader="Your request will be answered in the order it was received"
         />
         <CardContent>
           <form
@@ -96,7 +96,7 @@ class RequestForm extends Component {
                       inputMode="tel"
                       autoComplete="tel"
                       id="tel"
-                      name="tel"
+                      name="phone"
                       pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                     />
                     <span className="error" />
